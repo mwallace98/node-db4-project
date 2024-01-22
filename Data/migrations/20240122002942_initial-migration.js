@@ -14,10 +14,35 @@ exports.up = async function(knex) {
     table.string('ingredient_unit',50)
   })
   .createTable('steps', table => {
-    table.increments()
+    table.increments('steps_id')
+    table.string('step_text',200).notNullable()
+    table.integer('step_number').notNullable()
+    table.integer('recipe_id')
+    .unsigned()
+    .notNullable()
+    .references('recipe_id')
+    .inTable('recipes')
+    .onDelete('RESTRICT')
+    .onUpdate('RESTRICT')
+
   })
-  .createTable('step ingredients', table => {
-    table.increments()
+  .createTable('step_ingredients', table => {
+    table.increments('step_ingredient_id')
+    table.float('quantity').notNullable()
+    table.integer('step_id')
+    .unsigned()
+    .notNullable()
+    .references('step_id')
+    .inTable('steps')
+    .onDelete('RESTRICT')
+    .onUpdate('RESTRICT')
+    table.integer('ingedient_id')
+    .unsigned()
+    .notNullable()
+    .references('ingredient_id')
+    .inTable('ingredients')
+    .onDelete('RESTRICT')
+    .onUpdate('RESTRICT')
   })
 };
 
